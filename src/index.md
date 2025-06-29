@@ -1,10 +1,10 @@
 # VIA Explorer
 
 <div class="grid grid-cols-4">
-    <div class="card">
-        <h2>Average delay</h2>
-        ${Math.round(d3.mean(arrival_times, d => d.difference_s) / 60)}
-    </div>
+	<div class="card">
+		<h2>Average delay</h2>
+		${Math.round(d3.mean(arrival_times, d => d.difference_s) / 60)}
+	</div>
 </div>
 
 
