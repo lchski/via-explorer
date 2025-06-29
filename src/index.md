@@ -13,24 +13,23 @@ const arrival_times = FileAttachment('./data/viarail.ca/times/train-times.parque
 ```
 
 ```js
-[...arrival_times]
-```
-
-```js
 Plot.plot({
-    height: 20000,
-    y: {
-        tickFormat: "s"
-    },
-    x: {
-        transform: (d) => d / 60,
-        label: "Minutes"
-    },
-    marks: [
-        Plot.rectY(
-            arrival_times,
-            Plot.binX({y: "count", domain: [-14400, 14400]}, {x: "difference_s", fy: "stop_code"})
-        )
-    ]
+	y: {
+		percent: true
+	},
+	x: {
+		transform: d => d / 60,
+		label: "Minutes"
+	},
+	fy: {
+		transform: d => d.toString()
+	},
+	marks: [
+		Plot.rectY(
+			[...arrival_times]
+				.filter(d => d.stop_code === "TRTO"),
+			Plot.binX({y: "proportion-facet", domain: [-14400, 14400]}, {x: "difference_s", fy: "arrival_year"})
+		)
+	]
 })
 ```
