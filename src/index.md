@@ -40,7 +40,7 @@ const arrival_times = FileAttachment('./data/viarail.ca/times/train-times.parque
 ```
 
 ```js
-Plot.plot({
+station_oi === null ? html`<p>Pick a station to see the chart.</p>` : Plot.plot({
 	title: `Distribution of arrival punctuality at ${station_oi.stop_name} (${station_oi.stop_code})`,
 	y: {
 		percent: true
@@ -56,7 +56,7 @@ Plot.plot({
 	marks: [
 		Plot.rectY(
 			[...arrival_times]
-				.filter(d => (station_oi === null) ? false : d.stop_code === station_oi.stop_code),
+				.filter(d => d.stop_code === station_oi.stop_code),
 			Plot.binX({y: "proportion-facet", domain: [-14400, 14400]}, {x: "difference_s", fy: "arrival_year"})
 		)
 	]
