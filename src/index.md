@@ -7,6 +7,33 @@
 	</div>
 </div>
 
+```js
+const stations_raw = await FileAttachment('./data/viarail.ca/gtfs/stops.txt').csv()
+const stations_with_arrivals = await FileAttachment('./data/viarail.ca/times/station-codes.csv').csv()
+
+const stations = stations_raw
+	.filter(d => stations_with_arrivals.some(s => d.stop_code === s.stop_code))
+```
+
+```js
+const stations_search = view(Inputs.search(
+	stations,
+	{
+		columns: ["stop_code", "stop_name"]
+	}
+))
+```
+
+```js
+const station_oi = view(Inputs.table(stations_search, {
+	sort: "stop_code",
+	multiple: false,
+	width: {
+		stop_code: 100
+	}
+}))
+```
+
 
 ```js
 const arrival_times = FileAttachment('./data/viarail.ca/times/train-times.parquet').parquet()
@@ -14,20 +41,22 @@ const arrival_times = FileAttachment('./data/viarail.ca/times/train-times.parque
 
 ```js
 Plot.plot({
+	title: `Distribution of arrival punctuality at ${station_oi.stop_name} (${station_oi.stop_code})`,
 	y: {
 		percent: true
 	},
 	x: {
 		transform: d => d / 60,
-		label: "Minutes"
+		label: "Minutes (early to late)"
 	},
 	fy: {
-		transform: d => d.toString()
+		transform: d => d.toString(),
+		label: "Year"
 	},
 	marks: [
 		Plot.rectY(
 			[...arrival_times]
-				.filter(d => d.stop_code === "TRTO"),
+				.filter(d => (station_oi === null) ? false : d.stop_code === station_oi.stop_code),
 			Plot.binX({y: "proportion-facet", domain: [-14400, 14400]}, {x: "difference_s", fy: "arrival_year"})
 		)
 	]
