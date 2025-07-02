@@ -54,10 +54,10 @@ station_oi === null ? html`<p>Pick a station to see the chart.</p>` : Plot.plot(
 		label: "Year"
 	},
 	marks: [
-		Plot.rectY(
+		Plot.barY(
 			[...arrival_times]
 				.filter(d => d.stop_code === station_oi.stop_code),
-			Plot.binX({y: "proportion-facet", domain: [-14400, 14400]}, {x: "difference_s", fy: "arrival_year"})
+			Plot.binX({y: "proportion-facet", domain: [-14400, 14400]}, {x: {thresholds: [-14400, 0 * 60, 15 * 60, 60 * 60, 240 * 60, 14400], value: "difference_s"}, fy: "arrival_year", tip: true})
 		)
 	]
 })
